@@ -28,6 +28,7 @@ module Stylus
     @@paths    = []
     @@imports  = []
     @@plugins  = {}
+    @@defines  = {}
 
     # Stores a list of plugins to import inside `Stylus`, with an optional hash.
     def use(*options)
@@ -92,6 +93,14 @@ module Stylus
       @@compress = val
     end
 
+    def define(name,value)
+      @@defines[name] = value
+    end
+
+    def defines
+      @@defines
+    end
+
     # Compiles a given input - a plain String, `File` or some sort of IO object that
     # responds to `read`.
     # It accepts a hash of options that will be merged with the global configuration.
@@ -103,7 +112,7 @@ module Stylus
       end
       source  = source.read if source.respond_to?(:read)
       options = merge_options(options)
-      exec('compile', source, options, plugins, imports)
+      exec('compile', source, options, plugins, imports, defines)
     end
 
     # Converts back an input of plain CSS to the `Stylus` syntax. The source object can be
