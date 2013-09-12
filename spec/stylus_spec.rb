@@ -52,6 +52,18 @@ describe Stylus do
     Stylus.convert(css).should == stylus
   end
 
+  it "stores the given definitions" do
+    Stylus.define :asset_path, '/assets'
+    Stylus.define :asset_url, 'http://assets'
+    Stylus.should have(2).defines
+  end
+
+  it "includes the given definitions" do
+    Stylus.define :asset_url, 'http://assets'
+    input, output = fixture :defines
+    Stylus.compile(input).should == output
+  end
+
   it "stores the given plugins" do
     Stylus.use :one, :two, :argument => true
     Stylus.should have(2).plugins
